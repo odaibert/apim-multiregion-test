@@ -1,0 +1,34 @@
+<!--
+  APIM Policy — Region-based backend routing
+
+  Uses context.Deployment.Region to route each regional gateway
+  to its local Container App backend.
+
+  This file is provided for reference. The actual policy is deployed
+  inline via the Bicep template (apim-premium.bicep).
+-->
+<policies>
+  <inbound>
+    <base />
+    <choose>
+      <when condition="@(&quot;East US&quot;.Equals(context.Deployment.Region, StringComparison.OrdinalIgnoreCase))">
+        <set-backend-service base-url="{{backend-url-primary}}" />
+      </when>
+      <when condition="@(&quot;West US 2&quot;.Equals(context.Deployment.Region, StringComparison.OrdinalIgnoreCase))">
+        <set-backend-service base-url="{{backend-url-secondary}}" />
+      </when>
+      <otherwise>
+        <set-backend-service base-url="{{backend-url-primary}}" />
+      </otherwise>
+    </choose>
+  </inbound>
+  <backend>
+    <base />
+  </backend>
+  <outbound>
+    <base />
+  </outbound>
+  <on-error>
+    <base />
+  </on-error>
+</policies>
