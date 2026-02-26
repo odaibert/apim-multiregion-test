@@ -8,25 +8,7 @@ This self-contained Jupyter notebook deploys an Azure API Management **Premium**
 
 ## Architecture
 
-```
-                        ┌─────────────────────────┐
-                        │   APIM Premium Gateway   │
-                        │   (default endpoint)     │
-                        └─────────┬───────────────┘
-                                  │
-                    ┌─────────────┴─────────────┐
-                    │                           │
-          ┌─────────▼──────────┐     ┌──────────▼─────────┐
-          │  Regional Gateway  │     │  Regional Gateway   │
-          │  East US (primary) │     │  West US 2 (secondary)│
-          └─────────┬──────────┘     └──────────┬──────────┘
-                    │                            │
-          ┌─────────▼──────────┐     ┌──────────▼──────────┐
-          │  Container App     │     │  Container App      │
-          │  Health API        │     │  Health API         │
-          │  region: eastus    │     │  region: westus2    │
-          └────────────────────┘     └─────────────────────┘
-```
+![Architecture Diagram](../docs/images/architecture.jpeg)
 
 ## What Gets Deployed
 

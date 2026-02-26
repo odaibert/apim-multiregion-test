@@ -24,37 +24,7 @@ Azure API Management Premium tier supports deploying API gateways across multipl
 
 ## Architecture
 
-```
-+--------------------------------------------------------------------------+
-|                          Azure Resource Group                            |
-|                                                                          |
-|  +----------------------------+    +----------------------------------+  |
-|  |  Azure API Management      |    |  Monitoring                      |  |
-|  |  (Premium SKU)             |    |  Log Analytics + App Insights    |  |
-|  |                            |    +----------------------------------+  |
-|  |  Primary: East US          |                                          |
-|  |  Secondary: West US 2      |                                          |
-|  |                            |                                          |
-|  |  API: /health, /echo       |                                          |
-|  |  Policy: region-routing    |                                          |
-|  +---+------------------+----+                                           |
-|      |                  |                                                |
-|      v                  v                                                |
-|  +---+------------+  +--+-------------+                                  |
-|  | Container App  |  | Container App  |                                  |
-|  | East US        |  | West US 2      |                                  |
-|  | Health API     |  | Health API     |                                  |
-|  | (FastAPI)      |  | (FastAPI)      |                                  |
-|  +----------------+  +----------------+                                  |
-|                                                                          |
-+--------------------------------------------------------------------------+
-         |                    |                   |
-  +------+------+   +--------+--------+   +------+------+
-  | Jupyter     |   | Streamlit       |   | curl /      |
-  | Notebook    |   | Dashboard       |   | browser     |
-  | (lab cells) |   | (live health)   |   |             |
-  +-------------+   +-----------------+   +-------------+
-```
+![Architecture Diagram](docs/images/architecture.jpeg)
 
 **Data flow:** Clients hit the APIM default gateway → APIM routes to the nearest regional gateway (East US or West US 2) → the regional gateway uses `context.Deployment.Region` policy to call the local Container App backend → the backend returns its region identity. When a gateway is disabled, traffic automatically fails over to the remaining active region.
 
@@ -69,41 +39,7 @@ Azure API Management Premium tier supports deploying API gateways across multipl
 
 ## Repository Structure
 
-```
-apim-multiregion-test/
-├── labs/
-│   └── multi-region-failover/
-│       ├── multi-region-failover.ipynb   # Main lab notebook (Run All)
-│       ├── main.bicep                    # Orchestrator Bicep template
-│       ├── policy.xml                    # APIM region-routing policy
-│       └── README.md                     # Lab-specific documentation
-├── modules/
-│   ├── apim/
-│   │   └── apim-premium.bicep            # APIM Premium with multi-region
-│   ├── container-app/
-│   │   └── health-api.bicep              # Container App for health API
-│   └── monitoring/
-│       └── log-analytics.bicep           # Log Analytics + App Insights
-├── shared/
-│   ├── health-api/
-│   │   ├── app.py                        # FastAPI echo/health endpoints
-│   │   ├── Dockerfile
-│   │   └── requirements.txt
-│   └── utils.py                          # Shared Python helpers
-├── dashboard/
-│   ├── app.py                            # Streamlit live dashboard
-│   └── requirements.txt
-├── docs/
-│   └── images/
-│       └── dashboard.png                 # Dashboard screenshot
-├── .gitignore
-├── CODE_OF_CONDUCT.md
-├── CONTRIBUTING.md
-├── LICENSE
-├── README.md
-├── requirements.txt
-└── SECURITY.md
-```
+![File Tree](docs/images/file-tree.png)
 
 ## Prerequisites
 
