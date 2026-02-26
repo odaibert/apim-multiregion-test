@@ -8,7 +8,7 @@ This self-contained Jupyter notebook deploys an Azure API Management **Premium**
 
 ## Architecture
 
-![Architecture Diagram](../docs/images/architecture.jpeg)
+![Architecture Diagram](../../docs/images/jpny-architecture.jpeg)
 
 ## What Gets Deployed
 
